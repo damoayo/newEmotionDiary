@@ -1,0 +1,79 @@
+import React, { useState, useContext, useEffect } from "react";
+import MyHeader from "../component/MyHeader";
+import DevButton from "../component/DevButton";
+import { DiaryStateContext } from "../App";
+import DiaryList from "../component/DiaryList";
+
+const Home = () => {
+  const diaryList = useContext(DiaryStateContext);
+  // diaryList데이터를 날자에 맞게 가공해서 보여줘야한다.
+
+  const [data, setData] = useState([]);
+
+  const [curDate, setCurDate] = useState(new Date());
+  const headText = `${curDate.getFullYear()}년 ${curDate.getMonth() + 1}월`;
+
+  useEffect(() => {
+    const titleElement = document.getElementsByTagName("title")[0];
+    titleElement.innerHTML = `감성 일기장`;
+  });
+
+  useEffect(() => {
+    if (diaryList.length >= 1) {
+      const firstDay = new Date(
+        curDate.getFullYear(),
+        curDate.getMonth(),
+        1
+      ).getTime();
+      const lastDay = new Date(
+        curDate.getFullYear(),
+        curDate.getMonth() + 1,
+        0,
+        23,
+        59,
+        59
+      ).getTime();
+
+      setData(
+        diaryList.filter((it) => firstDay <= it.date && it.date <= lastDay)
+      );
+    }
+  }, [diaryList, curDate]);
+
+  const increaseMonth = () => {
+    setCurDate(
+      new Date(curDate.getFullYear(), curDate.getMonth() + 1, curDate.getDate())
+    );
+  };
+  const decreaseMonth = () => {
+    setCurDate(
+      new Date(curDate.getFullYear(), curDate.getMonth() - 1, curDate.getDate())
+    );
+  };
+  return (
+    <div>
+      <MyHeader
+        headText={headText}
+        leftChild={
+          <DevButton
+            width={"100%"}
+            text={"<"}
+            type={"contained"}
+            onClick={decreaseMonth}
+          />
+        }
+        rightChild={
+          <DevButton
+            width={"100%"}
+            text={">"}
+            type={"danger"}
+            onClick={increaseMonth}
+          />
+        }
+      />
+      <DiaryList diaryList={data} />
+    </div>
+  );
+};
+
+export default Home;
