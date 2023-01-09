@@ -1,4 +1,5 @@
 import React, {
+  useMemo,
   useState,
   useRef,
   useContext,
@@ -77,6 +78,35 @@ const DiaryEditor = ({ isEdit, originData }) => {
     }
   }, [isEdit, originData]);
 
+  const toolbar = useMemo(() => {
+    return {
+      items: [
+        "undo",
+        "redo",
+        {
+          name: "size",
+          acceptedValues: ["8pt", "10pt", "12pt", "14pt", "16pt"],
+        },
+        {
+          name: "font",
+          acceptedValues: [
+            "Arial",
+            "Georgia",
+            "Tahoma",
+            "Times New Roman",
+            "Verdana",
+          ],
+        },
+        "bold",
+        "italic",
+        "link",
+        "underline",
+        "color",
+        "background",
+      ],
+    };
+  }, []);
+
   return (
     <div className="DiaryEditor">
       <MyHeader
@@ -134,11 +164,11 @@ const DiaryEditor = ({ isEdit, originData }) => {
             <React.Fragment>
               <HtmlEditor
                 id="textarea"
-                height={"200px"}
+                height={"400px"}
                 placeholder="오늘은 어땠나요? (3자 이상)"
                 ref={contentRef}
                 valueType={"markdown"}
-                // toolbar={toolbar}
+                toolbar={toolbar}
                 value={content}
                 onValueChanged={(e) => setContent(e.value)}
               />
