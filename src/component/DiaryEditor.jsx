@@ -14,7 +14,10 @@ import { getStringDate } from "../util/date";
 import { emotionList } from "../util/emotion";
 
 import { DateBox } from "devextreme-react/date-box";
-import TextArea from "devextreme-react/text-area";
+// import TextArea from "devextreme-react/text-area";
+import "devextreme/dist/css/dx.light.css";
+import "devextreme/ui/html_editor/converters/markdown";
+import { HtmlEditor } from "devextreme-react/html-editor";
 
 const dateNew = new Date();
 
@@ -128,14 +131,26 @@ const DiaryEditor = ({ isEdit, originData }) => {
         <section>
           <h4>오늘의 일기</h4>
           <div className="input_box text_wrapper">
-            <TextArea
+            <React.Fragment>
+              <HtmlEditor
+                id="textarea"
+                height={"200px"}
+                placeholder="오늘은 어땠나요? (3자 이상)"
+                ref={contentRef}
+                valueType={"markdown"}
+                // toolbar={toolbar}
+                value={content}
+                onValueChanged={(e) => setContent(e.value)}
+              />
+            </React.Fragment>
+            {/* <TextArea
               id="textarea"
               height={"200px"}
               placeholder="오늘은 어땠나요? (3자 이상)"
               ref={contentRef}
               value={content}
               onValueChanged={(e) => setContent(e.value)}
-            />
+            /> */}
           </div>
         </section>
         <section>
